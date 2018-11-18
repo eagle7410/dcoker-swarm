@@ -1,0 +1,45 @@
+hostname | ip        | interface
+d1         10.0.2.1    enp0s3
+d2         10.0.2.2    enp0s3
+d3         10.0.2.3    enp0s3
+
+// HOSTS
+10.0.2.1 d1
+10.0.2.2 d2
+10.0.2.3 d3
+
+// /etc/network/interfaces
+
+
+auto enp0s3
+iface enp0s3 inet static
+address 10.0.2.x
+
+// SSH
+apt install openssh-server
+
+//DOCKER
+apt update
+apt-get install \
+     apt-transport-https \
+     ca-certificates \
+     curl
+
+// problem with python-software-properties
+
+curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+
+
+add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/debian \
+   $(lsb_release -cs) \
+   stable"
+
+apt update
+apt-cache madison docker-ce
+
+apt-get install docker-ce=18.06.1~ce~3-0~debian
+docker swarm init --advertise-addr 192.168.0.100
+
+// Manager
+docker swarm join --token SWMTKN-1-2l7dxsihnythbpee3r59sy4shzxu9nn3av6lz6h6jayw8tr956-e9wm2urklyu2gn4odh685gpay 192.168.0.100:2377

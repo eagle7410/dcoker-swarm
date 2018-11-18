@@ -1,0 +1,20 @@
+docker swarm init --advertise-addr 192.168.0.103 192.168.0.104
+docker swarm join --manager --listen-addr 192.168.0.104:2377 192.168.0.103:2377
+
+// SLAVE
+docker swarm join --token SWMTKN-1-5wna7nm405vp6iod39fwu4x3u40wtoy00scbfpnclzfxl8mbdm-6vl4pvyp0eoch27cb6os3me3u 192.168.0.103:2377
+
+// MANAGER
+docker swarm join --token SWMTKN-1-5wna7nm405vp6iod39fwu4x3u40wtoy00scbfpnclzfxl8mbdm-1hgymutt2aceaszvi8kxaaywy 192.168.0.103:2377
+
+
+docker pull
+docker service create --name test1 --replicas 3 -p=6060:6060 igor1stcherbina/test:1
+
+// Not manager
+ docker node demote $ID$
+// Get link
+ docker swarm join-token manager
+
+ docker service update --image igor1stcherbina/test:2.2 test1
+docker service update --rollback test1
